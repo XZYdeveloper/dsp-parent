@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.CenterMapper">
+
+    <resultMap id="goodsCmother" type="com.entity.GoodsCmother">
+        <id property="cmotherId" column="cmother_id"/>
+        <result property="commentId" column="comment_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="content" column="content"/>
+        <result property="timeCreate" column="time_create"/>
+        <result property="timeModified" column="time_modified"/>
+    </resultMap>
+
+    <resultMap id="goodsComment" type="com.entity.GoodsComment">
+        <id property="commentId" column="comment_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="content" column="content"/>
+        <result property="timeCreate" column="time_create"/>
+        <result property="timeModified" column="time_modified"/>
+    </resultMap>
+    <!-- 1.插入一条商品评价-->
+    <insert id="insertComment" parameterType="com.entity.GoodsComment">
+        insert into goods_comment(user_id,goods_id,content,time_create,time_modified) values(#{userId},#{goodsId},#{content},#{timeCreate},#{timeModified})
+    </insert>
+   <!-- 2.拿到某个商品的所有的评价-->
+    <select id="selectAllCommentById" resultMap="goodsComment">
+        select * from goods_comment where goods_id=#{goodsId}
+    </select>
+    <!-- 3. 拿到一条评论-->
+    <select id="getComment" resultMap="goodsComment">
+      select * from goods_comment where comment_id=#{commentId}
+    </select>
+    <!--4. 删除评论-->
+    <delete id="deleteComment" parameterType="long">
+         delete from goods_comment where comment_id=#{commentId}
+    </delete>
+    <!--6. 插入一条互评-->
+    <insert id="insertCmother" parameterType="com.entity.GoodsCmother">
+        insert into goods_cmother(comment_id,user_id,content,time_create,time_modified) values(#{commentId},#{userId},#{content},#{timeCreate},#{timeModified})
+    </insert>
+    <!--7. 拿到某条评价的所有互评-->
+    <select id="selectAllCmotherById" resultMap="goodsCmother">
+        select * from goods_cmother where comment_id=#{commentId}
+    </select>
+
+
+</mapper>
