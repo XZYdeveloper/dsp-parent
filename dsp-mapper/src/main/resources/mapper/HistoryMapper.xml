@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.HistoryMapper">
+
+    <resultMap id="history" type="com.entity.HistoryResponse.Goods">
+        <id property="id" column="goods_id"/>
+        <result property="title" column="title"/>
+        <result property="price" column="price"/>
+        <result property="pic" column="pic"/>
+    </resultMap>
+
+    <select id="getResponseGoodsById" resultMap="history" parameterType="string">
+        select g.goods_id,g.title,g.price,p.pic from goods g,goods_pic p where g.goods_id = #{id} and p.goods_id = #{id} and p.level = 0
+    </select>
+
+
+</mapper>
