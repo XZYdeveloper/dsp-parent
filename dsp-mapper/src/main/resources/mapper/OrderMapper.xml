@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.OrderMapper">
+    <resultMap id="orderMap" type="com.entity.Order">
+        <id property="orderId" column="order_id"></id>
+        <result property="userId" column="user_id"></result>
+        <result property="sum" column="sum"></result>
+        <result property="status" column="status"></result>
+        <result property="address" column="address"></result>
+        <result property="timeCreate" column="time_create"></result>
+        <result property="timePay" column="time_pay"></result>
+    </resultMap>
+   <!--
+    <insert id="insertOrder" parameterType="com.entity.Order">
+        insert into student(user_id,sum,status,address,time_create,time_pay) values(#{user_id},#{sum},#{status},#{address},#{time_create},#{time_pay})
+    </insert>
+
+
+    <update id="updateByOrderId" parameterType="Long">
+        update order set sum=#{sum},status=#{status},address=#{address},time_create=#{time_create},time_pay=#{time_pay} where order_id=#{order_id}
+    </update>
+
+    -->
+    <select id="selectAllOrder" resultMap="orderMap">
+            select * from `order`
+    </select>
+    <select id="selectByOrderId" parameterType="Long" resultType="com.entity.Order">
+        select * from `order` where order_id=#{orerId}
+    </select>
+    <select id="selectByUserId" parameterType="Long" resultMap="orderMap">
+        select * from `order` where user_id=#{userId}
+    </select>
+   <delete id="deleteByOrderId" parameterType="Long">
+            delete from `order` where order_id=#{orderId}
+    </delete>
+
+
+    <resultMap id="orderItem" type="com.entity.OrderItem">
+        <id property="itemId" column="item_id"></id>
+        <result property="orderId" column="order_id"></result>
+        <result property="goodsId" column="goods_id"></result>
+        <result property="number" column="number"></result>
+        <result property="sum" column="sum"></result>
+    </resultMap>
+
+    <delete id="deleteItemByOrderId" parameterType="Long">
+        delete from order_item where order_id=#{orderId}
+    </delete>
+
+
+
+    <!--
+    <insert id="insertOrderItem" parameterType="com.entity.Order_item">
+        insert into order_item(order_id,goods_id,number,sum) values(#{order_id},#goods_id,#{number},#{sum})
+    </insert>
+    <select id="selectByItemId" parameterType="Long" resultType="com.entity.Order_item">
+        select * from order_item where item_id=#{item_id}
+    </select>
+    <update id="updateByItemId" parameterType="Long">
+        update order_item set goods_id=#{goods_id},number=#{number},sum=#{sum}
+    </update>
+    <select id="getByOrderidUserId" parameterType="Long" resultType="com.entity.Order_item">
+        select * from order_item where order_id=#{order_id} and user_id=#{user_id}
+    </select>
+    <select id="getByOrderId" parameterType="long" resultType="com.entity.Order_item">
+        select * from order_item where order_id=#{order_id}
+    </select>-->
+    <!--<insert id="batchInsert" parameterType="">
+
+    </insert>-->
+
+</mapper>
