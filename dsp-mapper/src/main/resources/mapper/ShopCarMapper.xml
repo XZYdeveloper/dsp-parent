@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.ShopCarMapper"   >
+
+    <resultMap type="com.entity.ShopCar" id="sc">
+        <id property="shopcarId" column="shopcar_id"></id>
+        <result property="userId" column="user_id"></result>
+        <result property="goodsId" column="goods_id"></result>
+        <result property="number" column="number"></result>
+    </resultMap>
+
+    <!--查询所有的购物车信息-->
+    <select id="getAllShopCar" resultMap="sc">
+        select * from shopcar
+    </select>
+    <!--根据用户id查找购物车信息-->
+    <select id="getShopCarById" parameterType="Long" resultMap="sc">
+        select * from shopcar where user_id=#{uid}
+    </select>
+    <!--根据一个用户id和多个商品id计算出选中的购物车记录的个数-->
+    <select id="getScCountById" resultType="int">
+        select count(*) from shopcar where user_id=#{uid} and (
+        <foreach collection="list" item="item" index="index" separator="or">
+            (goods_id=#{item} )
+        </foreach>
+        )
+    </select>
+    <!--根据用户id计算出所有购物车记录的个数（用户全选时）-->
+    <select id="getAllCount" parameterType="Long" resultType="int">
+        select count(*) from shopcar where user_id=#{uid}
+    </select>
+
+    <!--根据用户id删除所有购物车记录（用户全选并点击删除时）-->
+    <delete id="deleteAllShopCar"  >
+        delete from shopcar where user_id=#{uid}
+    </delete>
+    <!--根据用户id和商品id删除整条该商品记录-->
+    <delete id="deleteShopCarById"  >
+        delete from shopcar where user_id=#{user_id} and goods_id=#{goods_id}
+    </delete>
+    <!-- 根据一个用户id和多个商品id删除多条购物车记录-->
+    <delete id="deleteShopCarsById" >
+        delete from shopcar where
+        <foreach collection="list" item="item" index="index" separator="or">
+            ( user_id=#{user_id} and goods_id=#{item} )
+        </foreach>
+    </delete>
+
+    <!--添加一条购物车信息-->
+    <insert id="addAll" parameterType="com.entity.ShopCar" useGeneratedKeys="true" keyProperty="shopcarId" >
+        insert into shopcar (user_id,goods_id,number) values (#{userId},#{goodsId},#{number})
+    </insert>
+    <!-- 根据一个用户id和一个商品id，及用户修改的数目修改购物车记录中的商品数目-->
+    <update id="updShopCarNumber" >
+        update shopcar set number=#{number} where user_id=#{user_id} and goods_id=#{goods_id}
+    </update>
+
+
+    <!--=====================================================-->
+
+
+    <resultMap type="com.entity.UserAddress" id="ua">
+        <id property="addressId" column="address_id"></id>
+        <result property="userId" column="user_id"></result>
+        <result property="name" column="name"></result>
+        <result property="phone" column="phone"></result>
+        <result property="address" column="address"></result>
+        <result property="isDefault" column="is_default"></result>
+        <result property="timeCreate" column="time_create"></result>
+    </resultMap>
+    <!--查找所有的地址信息-->
+    <select id="getAllUserAddress" resultMap="ua">
+        select * from user_address
+    </select>
+    <!--根据用户id获取该用户的地址信息（按照时间排序）-->
+    <select id="getAddressById" parameterType="Long" resultMap="ua">
+        select * from user_address where user_id=#{uid} order by time_create asc
+    </select>
+
+
+</mapper>
+
+
