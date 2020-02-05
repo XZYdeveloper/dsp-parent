@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.UserMapper">
+    <resultMap id="usermap" type="com.entity.User">
+        <id property="user_id" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="sex" column="sex"/>
+        <result property="phone" column="phone"/>
+        <result property="birthday" column="birthday"/>
+        <result property="pic" column="pic"/>
+        <result property="sessionid" column="sessionid"/>
+        <result property="timeCreate" column="time_create"/>
+        <result property="timeModified" column="time_modified"/>
+    </resultMap>
+    <!--通过用户名查询是否存在该用户-->
+    <select id="checkUsername" resultMap="usermap" parameterType="String">
+        select * from user where username=#{username}
+    </select>
+    <!--通过手机查询该手机是否存在-->
+    <select id="checkPhone" resultMap="usermap" parameterType="String">
+        select * from user where phone=#{phone}
+    </select>
+
+
+    <!--将sessionid写入数据库-->
+    <update id="updateSessionId" parameterType="com.entity.User">
+        update user set sessionid=#{sessionid} where username=#{username}
+    </update>
+    <!--通过手机号注册用户-->
+    <insert id="insertUser" parameterType="com.entity.User" >
+        insert into user(phone,username,password) values(#{phone},#{username},#{password})
+    </insert>
+
+
+
+
+
+
+</mapper>
