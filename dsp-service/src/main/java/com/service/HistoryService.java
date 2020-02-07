@@ -3,10 +3,12 @@ package com.service;
 import com.entity.HistoryResponse.Goods;
 import com.entity.HistoryResponse.History;
 import com.mapper.HistoryMapper;
+import com.util.QiniuUpload;
 import com.util.RedisConnect;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import redis.clients.jedis.Jedis;
 
 import java.text.SimpleDateFormat;
@@ -24,20 +26,46 @@ public class HistoryService {
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /**
+     * 返回404
+     */
+    public History info404() {
+        History history = new History();
+        history.setStatus(404);
+        return history;
+    }
+
+    /**
      * 添加历史记录
      * @param userid 传进来的用户id
      * @param goodsid 传进来的商品id
      */
-    public void addHistory(String userid, String goodsid) {
-        //判断用户id和商品id是否合法
-        //TODO
+    public History addHistory(String userid, String goodsid) {
+        History history = new History();
 
-        String key = userid+"_"+goodsid;
-        String time = format.format(new Date());
-        redis.set(key,time);
-        redis.expire(key,3600*24);
-
-        System.out.println("add '" + key + "' successful! ttl is:" + redis.ttl(key));
+        if("".equals(userid) || "".equals(goodsid)) {
+            history.setStatus(0);
+            return history;
+        }
+        //连接redis服务器
+        try {
+            redis = RedisConnect.getJedis();
+        } catch (Exception e) {
+            logger.error("Can't connect redis server.");
+            history.setStatus(0);
+            return history;
+        }
+        if(userid != null && goodsid != null) {
+            String key = userid + "_" + goodsid;
+            String time = format.format(new Date());
+            redis.set(key, time);
+            redis.expire(key, 3600 * 24);
+            history.setStatus(1);
+            history.setUserId(Integer.parseInt(userid));
+            System.out.println("add '" + key + "' successful! ttl is:" + redis.ttl(key));
+        } else {
+            history.setStatus(0);
+        }
+        return history;
     }
 
     /**
@@ -46,7 +74,7 @@ public class HistoryService {
      */
     public History getHistoryById(String userid) {
         History response = new History();
-        if(userid==null) {
+        if(userid=="") {
             response.setStatus(0);
             return response;
         }
@@ -81,6 +109,15 @@ public class HistoryService {
         }
         response.setList(list);
         return response;
+    }
+
+    /**
+     * 上传文件到七牛云
+     * @param file
+     * @return 成功返回url，失败返回error
+     */
+    public String upload(MultipartFile file) {
+        return QiniuUpload.upload(file);
     }
 
     /**

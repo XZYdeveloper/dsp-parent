@@ -1,11 +1,14 @@
 package com.entity.HistoryResponse;
 
 
+import com.alibaba.fastjson.annotation.JSONType;
+
 import java.math.BigDecimal;
 
 /**
  * 响应数据中商品数据
  */
+@JSONType(orders = {"id","title","price","pic","visitTime"})
 public class Goods {
     private int id; //商品id
     private String title; //商品标题

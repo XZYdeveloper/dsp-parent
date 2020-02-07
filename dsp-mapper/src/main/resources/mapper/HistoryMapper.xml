@@ -10,7 +10,7 @@
     </resultMap>
 
     <select id="getResponseGoodsById" resultMap="history" parameterType="string">
-        select g.goods_id,g.title,g.price,p.pic from goods g,goods_pic p where g.goods_id = #{id} and p.goods_id = #{id} and p.level = 0
+        select goods_id,title,price,pic from goods where goods_id = #{id}
     </select>
 
 
