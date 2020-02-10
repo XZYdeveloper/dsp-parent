@@ -1,64 +1,93 @@
 package com.controller;
 
-import com.entity.GoodsCmother;
+import com.entity.CenterResponse.CommentResponse;
+import com.entity.CenterResponse.UserPageResponse;
 import com.entity.GoodsComment;
-
-import com.mapper.CenterMapper;
 import com.service.CenterService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
 
 /**
  * @author yangkun
  * @date 2020/2/3
  */
-@RestController
+@RestController()
 public class CenterController {
 
 
     @Autowired
     CenterService centerService;
-    /**
-     * 跳到我的主页
-     */
 
 
     /**
-     * 添加商品评论
+     * 跳转到我的页面
      */
-
-    @RequestMapping(value = "/addcomment",method = RequestMethod.POST)
-    public String addCmother(GoodsComment goodsComment){
-        centerService.getCenterMapper().insertComment(goodsComment);
-        return "success";
+    @GetMapping("/toUserPage")
+    public String toUserPage(HttpSession session){
+        Long userId=(Long)session.getAttribute("userId");
+        if(userId == null){
+            return "请先登陆";
+        }else{
+            return null;
+        }
     }
     /**
-     * 获取某个商品的所有评论
+     * 实现订单评论---
      */
+    @PostMapping("/comment/{goodsId}")
+    public String addComment(GoodsComment goodsComment,
+                                   HttpSession session,
+                                   @PathVariable("goodsId") Long goodsId)
 
-    @RequestMapping(value = "/getcomment/{id}",
-                    method = RequestMethod.GET,
-                    produces = {"application/json;charset=utf-8"})
-    public List<GoodsComment> getAllBygoodsId(@PathVariable("id") long goodsId){
-        return centerService.getCenterMapper().selectAllCommentById(goodsId);
+    {
+        session.setAttribute("userId",2L);
+        Long userId=(Long)session.getAttribute("userId");
+        if(userId == null){
+            return "评价失败，请先登陆";
+        }else{
+            goodsComment.setTimeCreate(new Date());
+            goodsComment.setGoodsId(goodsId);
+            goodsComment.setUserId(userId);
+            centerService.getCenterMapper().insertComment(goodsComment);
+            return "评价成功";
+        }
+
+    }
+
+
+    /**
+     * 跳转到商品所有评论---
+     */
+    @GetMapping("/getComments/{goodsId}")
+    public List<CommentResponse> getGoodsdComments(@PathVariable("goodsId") Long goodsId){
+        List<CommentResponse> comments=centerService.getGoodsComments(goodsId);
+        return comments;
     }
     /**
-     * 用户删除自己的评价
+     * 跳转到用户个人信息
      */
-    @RequestMapping(value = "/deleteComment/userId={userId}&commentId={commentId}",method = RequestMethod.GET)
-    public String deleteMyComment(@PathVariable("userId")long userId,@PathVariable("commentId")long commentId){
-         GoodsComment goodsComment=centerService.getCenterMapper().getComment(commentId);
-         if(goodsComment.getUserId()==userId) {
-             centerService.getCenterMapper().deleteComment(commentId);
-             return "删除成功";
-         }else{
-             return "删除失败";
-         }
+    @GetMapping("/userInfo")
+    public String toUserCenter(HttpSession session){
+        Long userId=(Long)session.getAttribute("userId");
+
+        return null;
     }
+    /**
+     * 修改个人信息
+     */
+    @PostMapping("/updateInfo")
+    public String updateUserInfo(HttpSession session){
+
+        return "修改成功";
+    }
+
+
+
+
+
 
 
 }

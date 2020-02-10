@@ -27,12 +27,12 @@
     <select id="selectAllCommentById" resultMap="goodsComment">
         select * from goods_comment where goods_id=#{goodsId}
     </select>
-    <!-- 3. 拿到一条评论-->
+    <!-- 3. 拿到某个用户的所有评价-->
     <select id="getComment" resultMap="goodsComment">
-      select * from goods_comment where comment_id=#{commentId}
+      select * from goods_comment where user_id=#{userId}
     </select>
     <!--4. 删除评论-->
-    <delete id="deleteComment" parameterType="long">
+    <delete id="deleteComment" parameterType="java.lang.Long">
          delete from goods_comment where comment_id=#{commentId}
     </delete>
     <!--6. 插入一条互评-->
@@ -43,6 +43,19 @@
     <select id="selectAllCmotherById" resultMap="goodsCmother">
         select * from goods_cmother where comment_id=#{commentId}
     </select>
-
+    <!--9.评价页面自定义返回类-->
+    <select id="getGoodsComments" parameterType="java.lang.Long" resultType="com.entity.CenterResponse.CommentResponse">
+        SELECT
+            gc.content,
+            gc.time_create as timeCreate,
+            g.pic as goodsPic,
+            u.username,
+            u.pic as userPic
+        FROM  goods_comment gc
+            INNER JOIN goods g
+                INNER JOIN user u
+                           ON gc.`goods_id` = g.`goods_id`
+                               AND gc.`user_id` = u.`user_id` where g.goods_id=#{goodsId}
+    </select>
 
 </mapper>
