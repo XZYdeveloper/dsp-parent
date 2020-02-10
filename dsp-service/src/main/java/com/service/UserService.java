@@ -49,7 +49,7 @@ public class UserService {
             //用户状态为0说明没有登陆
             if (u1.getStatus() == 0) {
                 session.setAttribute("user",u1);
-                session.setAttribute("userid", u1.getUser_id());
+                session.setAttribute("userId", u1.getUser_id());
                 session.setMaxInactiveInterval(60*10);//设置session最大生命周期为十分钟
                 //map中没有username  首次登陆 存入map
                 if (!MemoryData.getSessionIDMap().containsKey(username))
@@ -116,8 +116,8 @@ public class UserService {
             //验证码相等就登陆
             if (code.trim().equals(vercode)) {
                 if (u1.getStatus() == 0) {
-                    if (session.getAttribute("userid") == null) {
-                        session.setAttribute("userid", u1.getUser_id());
+                    if (session.getAttribute("userId") == null) {
+                        session.setAttribute("userId", u1.getUser_id());
                         session.setMaxInactiveInterval(60*10);//设置session最大生命周期为十分钟
                         //将用户状态设为1
                         userMapper.updateStatus(u1.getUsername(), 1);
