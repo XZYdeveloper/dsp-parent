@@ -5,6 +5,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -13,6 +14,7 @@ import javax.sql.DataSource;
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.controller","com.service","com.entity"})
 @MapperScan(basePackages = "com.mapper")
+@ServletComponentScan(basePackages = {"com.controller","com.service","com.entity"})
 public class DspWebApplication {
 
     public static void main(String[] args) {

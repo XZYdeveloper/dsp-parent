@@ -19,7 +19,7 @@ public class User implements Serializable {
     private String phone;
     private String birthday;
     private String pic;
-    private String sessionid;
+    private int status;
     private Date time_create;
     private Date time_modified;
 
@@ -90,14 +90,13 @@ public class User implements Serializable {
         this.pic = pic;
     }
 
-    public String getSessionid() {
-        return sessionid;
+    public int getStatus() {
+        return status;
     }
 
-    public void setSessionid(String sessionid) {
-        this.sessionid = sessionid;
+    public void setStatus(int status) {
+        this.status = status;
     }
-
 
     public Date getTime_create() {
         return time_create;

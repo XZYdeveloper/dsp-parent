@@ -28,7 +28,7 @@ public class SendMsg {
                 new NameValuePair("Uid", "夏目川城"),
                 new NameValuePair("Key", "d41d8cd98f00b204e980"),
                 new NameValuePair("smsMob",phone),
-                new NameValuePair("smsText","您正在注册本站会员,本次验证码为:"+code+""+"有效时间为10分钟")
+                new NameValuePair("smsText","您的验证码是"+code+"，有效时间为10分钟，请尽快验证。")
         };
         map.put("code",code);
         post.setRequestBody(data);

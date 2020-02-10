@@ -9,7 +9,7 @@
         <result property="phone" column="phone"/>
         <result property="birthday" column="birthday"/>
         <result property="pic" column="pic"/>
-        <result property="sessionid" column="sessionid"/>
+        <result property="status" column="status"/>
         <result property="timeCreate" column="time_create"/>
         <result property="timeModified" column="time_modified"/>
     </resultMap>
@@ -22,19 +22,25 @@
         select * from user where phone=#{phone}
     </select>
 
+    <!--通过用户id查找用户-->
+    <select id="checkId" resultMap="usermap" parameterType="long">
+        select * from user where user_id=#{id}
+    </select>
 
-    <!--将sessionid写入数据库-->
-    <update id="updateSessionId" parameterType="com.entity.User">
-        update user set sessionid=#{sessionid} where username=#{username}
-    </update>
     <!--通过手机号注册用户-->
     <insert id="insertUser" parameterType="com.entity.User" >
         insert into user(phone,username,password) values(#{phone},#{username},#{password})
     </insert>
 
+    <!--更改用户登陆状态-->
+    <update id="updateStatus" parameterType="com.entity.User">
+        update user set status=#{status} where username=#{username}
+    </update>
 
-
-
+    <!--通过手机号修改密码-->
+    <update id="updatepwd" parameterType="com.entity.User">
+        update user set password=#{newpwd} where phone=#{phone}
+    </update>
 
 
 </mapper>
