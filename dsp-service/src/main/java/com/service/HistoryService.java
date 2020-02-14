@@ -21,8 +21,9 @@ public class HistoryService {
 
     @Autowired
     private HistoryMapper mapper;
+    @Autowired
+    private RedisService redis;
 
-    private Jedis redis;
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /**
@@ -46,19 +47,12 @@ public class HistoryService {
             history.setStatus(0);
             return history;
         }
-        //连接redis服务器
-        try {
-            redis = RedisConnect.getJedis();
-        } catch (Exception e) {
-            logger.error("Can't connect redis server.");
-            history.setStatus(0);
-            return history;
-        }
+
         if(userid != null && goodsid != null) {
             String key = userid + "_" + goodsid;
             String time = format.format(new Date());
             redis.set(key, time);
-            redis.expire(key, 3600 * 24);
+            redis.expire(key, 3600 * 24 * 7);
             history.setStatus(1);
             history.setUserId(Integer.parseInt(userid));
             System.out.println("add '" + key + "' successful! ttl is:" + redis.ttl(key));
@@ -81,14 +75,6 @@ public class HistoryService {
         //如果用户id不存在
         //TODO
 
-        //连接redis服务器
-        try {
-            redis = RedisConnect.getJedis();
-        } catch (Exception e) {
-            logger.error("Can't connect redis server.");
-            response.setStatus(0);
-            return response;
-        }
 
         response.setStatus(1);
         response.setUserId(Integer.parseInt(userid));

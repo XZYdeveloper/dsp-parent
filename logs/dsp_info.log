@@ -1,5 +1,8 @@
-2020-02-07 12:38:34 [ERROR]-[com.util.QiniuUpload] upload上传失败
-  2020-02-07 12:41:22 [ERROR]-[com.util.QiniuUpload] upload上传失败
-  2020-02-07 12:46:32 [ERROR]-[com.util.QiniuUpload] upload上传失败
-  2020-02-07 12:47:39 [ERROR]-[com.util.QiniuUpload] upload上传失败
+2020-02-13 18:25:56 [ERROR]-[com.service.SecKillReceiver] Receiver_Errororg.springframework.dao.DataIntegrityViolationException: 
+### Error updating database.  Cause: java.sql.SQLException: Field 'id' doesn't have a default value
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: insert into seckill_order(user_id, goods_id, time_create) values (?,?,?)
+### Cause: java.sql.SQLException: Field 'id' doesn't have a default value
+; Field 'id' doesn't have a default value; nested exception is java.sql.SQLException: Field 'id' doesn't have a default value
   

@@ -71,6 +71,11 @@ public class HistoryController {
     @RequestMapping(value = "/upload", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public String upload(@RequestParam("file") MultipartFile file) {
         UploadResponse resp = new UploadResponse();
+        //如果文件为空
+        if(file.isEmpty()) {
+            resp.setStatus(0);
+            return JSON.toJSONString(resp);
+        }
         String ret = historyService.upload(file);
         if("error".equals(ret)) {
             resp.setStatus(0);

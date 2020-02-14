@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.SecKillMapper">
+
+    <resultMap id="killgoods" type="com.entity.SecKillResponse.KillGoods">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="stock" column="stock"/>
+        <result property="price" column="price"/>
+    </resultMap>
+
+    <resultMap id="killorder" type="com.entity.SecKillResponse.KillOrder">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="createTime" column="time_create"/>
+    </resultMap>
+
+    <select id="getAllKillGoods" resultMap="killgoods" >
+        select * from seckill_goods where stock > 0
+    </select>
+
+    <select id="getKillGoodsById" resultMap="killgoods">
+        select * from seckill_goods where id = #{id}
+    </select>
+
+    <update id="decrStockById">
+        update seckill_goods set stock = stock - 1 where id = #{id}
+    </update>
+
+    <select id="checkOrder" resultMap="killorder" >
+        select * from seckill_order where user_id = #{userid} and goods_id = #{goodsid}
+    </select>
+
+    <insert id="doKill">
+        insert into seckill_order(user_id, goods_id, time_create) values (#{userid},#{goodsid},#{time})
+    </insert>
+
+    <update id="resetStock">
+        update seckill_goods set stock = #{stock} where id = #{goodsid}
+    </update>
+
+</mapper>
