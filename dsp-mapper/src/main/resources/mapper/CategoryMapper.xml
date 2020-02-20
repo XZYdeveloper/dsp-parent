@@ -6,20 +6,23 @@
     <resultMap id="topcategory" type="com.entity.TopCategory">
         <id property="id" column="id"></id>
         <result property="title" column="title"></result>
-        <result property="level" column="level"></result>
-        <collection property="underlyingCategories" ofType="com.entity.UnderlyingCategory">
-            <id column="uid" property="id"></id>
-            <result column="title" property="title"></result>
-            <result column="cate1_id" property="cate1_id"></result>
-            <result column="level" property="level"></result>
-        </collection>
     </resultMap>
 
     <resultMap id="underlyingcategory" type="com.entity.UnderlyingCategory">
         <id property="id" column="id"></id>
         <result property="title" column="title"></result>
-        <result property="cate1_id" column="cate1_id"></result>
-        <result property="level" column="level"></result>
+        <result property="cateId" column="cate1_id"></result>
+    </resultMap>
+
+    <resultMap id="goods" type="com.entity.Goods">
+        <id property="id" column="goods_id"></id>
+        <result property="pic" column="pic"></result>
+        <result property="title" column="title"></result>
+        <result property="price" column="price"></result>
+        <result property="stock" column="stock"></result>
+        <result property="sales" column="sales"></result>
+        <result property="content" column="content"></result>
+        <result property="cateId" column="cate_id"></result>
     </resultMap>
 
     <!--查询所有一级分类-->
@@ -27,29 +30,14 @@
         select * from category_1
     </select>
 
-    <!--增加一个一级分类-->
-    <insert id="saveTopCategory" parameterType="com.entity.TopCategory">
-        insert into category_1(id,title,level)values(#{id},#{title},#{level})
-    </insert>
-
-    <!--根据id删除一个一级分类-->
-    <delete id="deleteTopCategory" parameterType="INT">
-        delete from user where id=#{id}
-    </delete>
-
-    <!--更改一个一级分类-->
-    <update id="updateTopCategory" parameterType="com.entity.TopCategory">
-        update category_1 set id=#{id},title=#{title},level=#{level}
-    </update>
-
-    <!--查询所有二级分类-->
-    <select id="getAllUnderlyingCategory" resultMap="underlyingcategory">
-    select * from category_2
+    <!--根据一级分类的id查询二级分类-->
+    <select id="findUnderlyingById" resultMap="underlyingcategory">
+    SELECT * FROM category_2 LEFT OUTER JOIN category_1 ON category_1.id=category_2.cate1_id where category_1.id = #{id}
     </select>
 
-    <!--根据一级分类的id查询二级分类-->
-    <select id="findById" resultMap="underlyingcategory">
-    SELECT * FROM category_2 LEFT OUTER JOIN category_1 ON category_1.id=category_2.cate1_id where category_1.id = #{id}
+    <!--根据二级分类的id查询商品-->
+    <select id="findGoodsById" resultMap="goods">
+    SELECT * FROM goods LEFT OUTER JOIN category_2 ON category_2.id=goods.cate_id where category_2.id = #{id}
     </select>
 
 </mapper>

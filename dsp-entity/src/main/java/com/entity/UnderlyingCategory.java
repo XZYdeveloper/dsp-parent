@@ -11,8 +11,15 @@ public class UnderlyingCategory implements Serializable {
 
     private Integer id;
     private String title;
-    private Integer cate1_id;
-    private Integer level;
+    private Integer cateId;
+
+    public Integer getCateId() {
+        return cateId;
+    }
+
+    public void setCateId(Integer cateId) {
+        this.cateId = cateId;
+    }
 
     public Integer getId() {
         return id;
@@ -30,19 +37,4 @@ public class UnderlyingCategory implements Serializable {
         this.title = title;
     }
 
-    public Integer getCate1_id() {
-        return cate1_id;
-    }
-
-    public void setCate1_id(Integer cate1_id) {
-        this.cate1_id = cate1_id;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
-    }
 }

@@ -1,7 +1,6 @@
 package com.entity;
 
 import java.io.Serializable;
-import java.util.*;
 
 /**
  * @author 杨可
@@ -12,16 +11,6 @@ public class TopCategory implements Serializable {
 
     private Integer id;
     private String title;
-    private Integer level;
-    private List<UnderlyingCategory> underlyingCategories;
-
-    public List<UnderlyingCategory> getUnderlyingCategories() {
-        return underlyingCategories;
-    }
-
-    public void setUnderlyingCategories(List<UnderlyingCategory> underlyingCategories) {
-        this.underlyingCategories = underlyingCategories;
-    }
 
     public Integer getId() {
         return id;
@@ -37,14 +26,6 @@ public class TopCategory implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
     }
 
 }
